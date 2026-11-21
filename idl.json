@@ -1,9 +1,6 @@
 {
   "version": "0.1.0",
   "name": "registro",
-  "metadata": {
-    "address": "38oTMyvUTmqkBQeMiuok5F2mPjp9dVadWdBeQTDNmTUY"
-  },
   "instructions": [
     {
       "name": "crearRegistro",
@@ -270,5 +267,8 @@
       "name": "NoSKU",
       "msg": "Error, la venta no esta en el historial del cliente"
     }
-  ]
+  ],
+  "metadata": {
+    "address": "23v4CNhdm99ZXoohKf6RPJ9Dg7LQd8DSnV3CnGN5e2Rp"
+  }
 }

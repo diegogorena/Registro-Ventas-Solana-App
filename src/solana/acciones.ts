@@ -33,27 +33,16 @@ export async function crearRegistro(wallet: WalletFirma, connection: Connection,
 
 /** Ejercicio 1 del día 4: crear la cuenta Cliente y actualizar Registro. */
 export async function crearCliente(wallet: WalletFirma, connection: Connection, nombreNegocio: string, nombre: string, opciones?: OpcionesEnvio): Promise<string> {
-  nombreNegocio = negocioValido(nombreNegocio);
-  nombre = nombreValido(nombre);
-  const owner = firmante(wallet);
-  const registro = pdaRegistro(nombreNegocio, owner.address);
-  const id = await siguienteId(nombreNegocio, owner.address);
-  const cliente = pdaCliente(registro, id);
-  const ix = getCrearClienteInstruction({ owner, registro, cliente, nombre });
-  return enviar(ix, wallet, connection, opciones);
+  // TODO 1: sigue el patron del ejemplo crearRegistro.
+  // Consulta docs/DIA-4.md y el tipo Input de la instruccion generada.
+  throw new Error("Ejercicio 1 pendiente: completa crearCliente en src/solana/acciones.ts.");
 }
 
 /** Ejercicio 2: mismo patrón con una Venta que depende del Cliente. */
 export async function registrarVenta(wallet: WalletFirma, connection: Connection, nombreNegocio: string, idCliente: number, sku: string, descripcion: string, monto: number, opciones?: OpcionesEnvio): Promise<string> {
-  nombreNegocio = negocioValido(nombreNegocio);
-  idCliente = idValido(idCliente);
-  sku = skuValido(sku);
-  descripcion = descripcionValida(descripcion);
-  monto = montoValido(monto);
-  const owner = firmante(wallet);
-  const { registro, cliente, venta } = cadena(nombreNegocio, owner.address, idCliente, sku);
-  const ix = getRegistrarVentaInstruction({ owner, registro, cliente, venta, idCliente, sku, descripcion, monto });
-  return enviar(ix, wallet, connection, opciones);
+  // TODO 2: sigue el patron del ejemplo crearRegistro.
+  // Consulta docs/DIA-4.md y el tipo Input de la instruccion generada.
+  throw new Error("Ejercicio 2 pendiente: completa registrarVenta en src/solana/acciones.ts.");
 }
 
 export async function cambiarMonto(wallet: WalletFirma, connection: Connection, nombreNegocio: string, idCliente: number, sku: string, nuevoMonto: number, opciones?: OpcionesEnvio): Promise<string> {
