@@ -18,6 +18,9 @@
     "comprobar:idl": "node scripts/verificar-contrato.mjs",
     "prebuild": "npm run comprobar:idl",
     "predev": "npm run comprobar:idl"
+    "configurar:idl": "node scripts/configurar-idl.mjs",
+  "configurar:mi-programa": "node scripts/configurar-idl.mjs ./tmp-idl/registro.json --program-id 23v4CNhdm99ZXoohKf6RPJ9Dg7LQd8DSnV3CnGN5e2Rp"
+
   },
   "dependencies": {
     "@solana/kit": "^8.6.0",
