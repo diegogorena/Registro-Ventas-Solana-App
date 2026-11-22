@@ -86,6 +86,53 @@ export function Registro({ onCambio, onOcupado }: { onCambio: () => void; onOcup
     } finally { setOcupado(false); }
   }
 
+  function exportarExcel() {
+    if (!registro) return;
+    const filas = [
+      ['Negocio', 'ID Cliente', 'Cliente', 'SKU', 'Descripcion', 'Importe', 'Unidad', 'Cuenta PDA']
+    ];
+
+    for (const cliente of registro.clientes) {
+      if (cliente.ventas.length === 0) {
+        filas.push([
+          registro.nombreNegocio,
+          String(cliente.idCliente),
+          cliente.nombre,
+          '-',
+          'Sin ventas registradas',
+          '0',
+          UNIDAD_MONTO,
+          cliente.direccion
+        ]);
+      } else {
+        for (const venta of cliente.ventas) {
+          filas.push([
+            registro.nombreNegocio,
+            String(cliente.idCliente),
+            cliente.nombre,
+            venta.sku,
+            venta.descripcion,
+            String(venta.monto),
+            UNIDAD_MONTO,
+            venta.direccion
+          ]);
+        }
+      }
+    }
+
+    const contenidoCsv = '\uFEFF' + filas
+      .map((fila) => fila.map((celda) => `"${String(celda).replace(/"/g, '""')}"`).join(';'))
+      .join('\n');
+
+    const blob = new Blob([contenidoCsv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const enlace = document.createElement('a');
+    enlace.href = url;
+    enlace.download = `reporte-ventas-${registro.nombreNegocio.replace(/\s+/g, '_')}.csv`;
+    enlace.click();
+    URL.revokeObjectURL(url);
+  }
+
   const esOtraAutoridad = !!autoridad.trim() && autoridad.trim() !== walletDireccion;
   const permiteEscribir = !programa.esReferencia && !!wallet.publicKey && !esOtraAutoridad;
   return <>
@@ -100,7 +147,7 @@ export function Registro({ onCambio, onOcupado }: { onCambio: () => void; onOcup
       {errorLectura && <p className="notice error" role="alert">{errorLectura}</p>}
     </section>
     <div className="workspace-grid">
-      <section className="panel customers-panel"><div className="panel-heading"><h3>Clientes y ventas</h3>{registro && <span className="count">{registro.clientes.length} clientes</span>}</div>
+      <section className="panel customers-panel"><div className="panel-heading"><h3>Clientes y ventas</h3><div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>{registro && <><span className="count">{registro.clientes.length} clientes</span><button type="button" className="button secondary" disabled={registro.clientes.length === 0} onClick={exportarExcel}>Exportar a Excel</button></>}</div></div>
         {!registro ? <div className="empty-state"><span className="empty-symbol">◎</span><h4>{consultado ? 'El registro todavía no existe' : 'El negocio aparecerá aquí'}</h4><p>{consultado ? 'Comprueba el nombre y la autoridad, o crea un registro con tu wallet conectada.' : 'Consulta el registro para ver sus clientes y las ventas activas de cada uno.'}</p></div> : <>
           <div className="registry-summary"><div><span className="label">Negocio</span><strong>{registro.nombreNegocio}</strong></div><div><span className="label">Último ID asignado</span><strong>{registro.idCounter}</strong></div></div>
           <details className="technical-details"><summary>Dirección del registro</summary><code className="address">{registro.direccion}</code></details>
